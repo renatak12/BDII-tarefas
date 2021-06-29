@@ -4,7 +4,7 @@ drop table if exists trabalha cascade;
 drop table if exists gerente cascade;
 
 CREATE TABLE empregado(
-    cod_empregado NUMERIC(4) PRIMARY KEY,  
+    cod_empregado NUMERIC(4) PRIMARY KEY NOT NULL,  
     nome_empregado CHAR(100) NOT NULL,
     rua CHAR(255) NOT NULL,
     cidade CHAR(100) NOT NULL,
@@ -12,18 +12,19 @@ CREATE TABLE empregado(
 );
 
 CREATE TABLE companhia (
-    cnpj CHAR(12)PRIMARY KEY NOT NULL,  
+    cod_companhia NUMERIC(4) PRIMARY KEY NOT NULL,
+    cnpj CHAR(12) UNIQUE NOT NULL,  
     nome_companhia CHAR(100) NOT NULL,
     cidade CHAR(100) NOT NULL
 );
 
 CREATE TABLE trabalha (
     cod_empregado NUMERIC(4) PRIMARY KEY NOT NULL,  
-    cnpj_cod CHAR(12) NOT NULL,
+    cod_companhia CHAR(12) NOT NULL,
     CONSTRAINT fk_empregado FOREIGN KEY (cod_empregado)
         REFERENCES empregado(cod_empregado)
         ON DELETE RESTRICT ON UPDATE CASCADE,
- 	CONSTRAINT fk_cnpj_cod FOREIGN KEY (cnpj_cod)
+ 	CONSTRAINT fk_cod_companhia FOREIGN KEY (cod_companhia)
         REFERENCES companhia(cnpj)
         ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -47,15 +48,15 @@ INSERT INTO empregado (cod_empregado, nome_empregado, rua, cidade, salario)
 		(9496, 'João', 'João Damasceno', 'caicó', 1200)
 ;
 
-INSERT INTO companhia (cnpj, nome_companhia, cidade)
+INSERT INTO companhia (cod_companhia, cnpj, nome_companhia, cidade)
 	VALUES
-		('947374837733', 'Soft Sell', 'caicó'),
-		('947374837735', 'Soft Sell', 'caicó'),
-		('777333222112', 'Other', 'caicó'),
-		('777333222111', 'Other', 'caicó')
+		(1434,'947374837733', 'Soft Sell', 'caicó'),
+		(4321,'947374837735', 'Soft Sell', 'caicó'),
+		(1233,'777333222112', 'Other', 'caicó'),
+		(1254,'777333222111', 'Other', 'caicó')
 ;
 
-INSERT INTO trabalha (cod_empregado, cnpj_cod)
+INSERT INTO trabalha (cod_empregado, cod_companhia)
 	VALUES 
 		(9493, '947374837733'),
 		(9495, '777333222112'),
